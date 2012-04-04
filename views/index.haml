@@ -12,9 +12,6 @@
 %script
   new TWTR.Widget({ version: 2, type: 'search', search: '#SFC履修選抜', interval: 30000, title: '', subject: '#SFC履修選抜', width: 515, height: 300, theme: { shell: { background: '#8ec1da', color: '#ffffff' }, tweets: { background: '#ffffff', color: '#444444', links: '#1985b5' } }, features: { scrollbar: false, loop: true, live: true, behavior: 'default' } }).render().start(); </script>
 %p
-  このWebサイトのコード、ならびにSFC-SFSから情報を取得するスクリプトは <a href="https://github.com/ymrl/sfc_student_selection">https://github.com/ymrl/sfc_student_selection</a> にて公開してあります。（事前にすべての授業を履修希望しておく必要があります）
+  このWebサイトのコード、ならびにSFC-SFSから情報を取得するスクリプトは <a href="https://github.com/ymrl/sfc_student_selection">https://github.com/ymrl/sfc_student_selection</a> にて公開してあります。
 %p 
   ご意見、ご要望はTwitterから<a href="http://twitter.com/ymrl">@ymrl</a>またはメールで ymrl [at] ymrl.net までお送りください。
-%script
-  document.getElementsByTagName('form')[0].addEventListener('submit',function(e){location.href ='/'+document.getElementById('num').value;e.preventDefault();})
-

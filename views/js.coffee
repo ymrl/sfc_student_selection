@@ -17,9 +17,8 @@ jQuery ->
 		T("#tbox").tweetBox
 			label: label
 			defaultContent: "#{content} #SFC履修選抜 http://xn--8uqs71aoyeyq7c.xn--s9j219o.jp/"
-
-		
-
-		
+	jQuery('form#numForm').bind 'submit',(e)->
+		location.href = "/#{jQuery(this).find('#num').val()}"
+		e.preventDefault()
 
 
