@@ -1,0 +1,14 @@
+%h2
+  = "学籍番号 #{h @num} の履修選抜結果"
+%ul#list{:class=>@intern ? 'intern' : 'outside'}
+  - @pms.each do |e|
+    %li
+      = h (@intern? e.lecture_title : "****")
+  - if @pms.length == 0
+    %li （情報なし）
+-if !@intern
+  %p
+    科目名を表示するにはキャンパス内からアクセスするか、<a href="http://www.sfc.itc.keio.ac.jp/ja/network_cns_vpn.html">VPNサービス</a>をご利用ください。
+%p
+  このページに掲載されている情報は速報性を重視した非公式なものです。必ず大学側の公式な情報も確認してください。
+#tbox
