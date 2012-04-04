@@ -5,7 +5,7 @@
     %li
       = h (@intern? e.lecture_title : "****")
   - if @pms.length == 0
-    %li （情報なし）
+    %li.nocount （情報なし）
 -if !@intern
   %p
     科目名を表示するにはキャンパス内からアクセスするか、<a href="http://www.sfc.itc.keio.ac.jp/ja/network_cns_vpn.html">VPNサービス</a>をご利用ください。
