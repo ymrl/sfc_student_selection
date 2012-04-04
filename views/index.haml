@@ -4,13 +4,15 @@
     %input{:type=>:text,:name=>:num,:id=>:num}
     %input{:type=>:submit,:value=>'見る'}
 %p
-  %del
-    http://履修選抜.死ぬ.jp/自分の学籍番号 で履修選抜を通っている科目を見ることができます。情報はSFC-SFSを20分ごとにクロールして収集しています。
+  http://履修選抜.死ぬ.jp/自分の学籍番号 で履修選抜を通っている科目を見ることができます。情報はSFC-SFSを20分ごとにクロールして収集しています。選抜結果の公開情報などは <a href="http://twitter.com/sfc_selection">@sfc_selection</a>がTwitterに発言します。
 %p
   SFC外からのアクセスの場合は、科目名が伏字で表示されます。すべてを表示するためには<a href="http://www.sfc.itc.keio.ac.jp/ja/network_cns_vpn.html">VPNサービス</a>をご利用ください。
+#tbox
+%script{:charset=>"utf-8",:src=>"http://widgets.twimg.com/j/2/widget.js"}
+%script
+  new TWTR.Widget({ version: 2, type: 'search', search: '#SFC履修選抜', interval: 30000, title: '', subject: '#SFC履修選抜', width: 515, height: 300, theme: { shell: { background: '#8ec1da', color: '#ffffff' }, tweets: { background: '#ffffff', color: '#444444', links: '#1985b5' } }, features: { scrollbar: false, loop: true, live: true, behavior: 'default' } }).render().start(); </script>
 %p
   このWebサイトのコード、ならびにSFC-SFSから情報を取得するスクリプトは <a href="https://github.com/ymrl/sfc_student_selection">https://github.com/ymrl/sfc_student_selection</a> にて公開してあります。（事前にすべての授業を履修希望しておく必要があります）
-#tbox
 %p 
   ご意見、ご要望はTwitterから<a href="http://twitter.com/ymrl">@ymrl</a>またはメールで ymrl [at] ymrl.net までお送りください。
 %script
