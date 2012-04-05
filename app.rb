@@ -22,7 +22,7 @@ get '/js.js' do
   coffee :js
 end
 get '/hot' do
-  @hots = LectureModel.limit(20).filter(:selection=>true,:finished=>false).filter('odds > 1.0').order(:odds).reverse.all
+  @hots = LectureModel.limit(40).filter(:selection=>true,:finished=>false).filter('odds > 1.0').order(:odds).reverse.all
   haml :hot
 end
 
