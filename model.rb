@@ -9,6 +9,9 @@ class LectureModel < Sequel::Model
     string :title
     bool :selection
     bool :finished
+    integer :applicants
+    integer :limit
+    float :odds
   end
 end
 class PermissionModel < Sequel::Model

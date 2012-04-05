@@ -21,6 +21,10 @@ end
 get '/js.js' do
   coffee :js
 end
+get '/hot' do
+  @hots = LectureModel.limit(20).filter(:selection=>true,:finished=>false).filter('odds > 1.0').all
+  haml :hot
+end
 
 get '/:num' do
   num = params[:num].to_s

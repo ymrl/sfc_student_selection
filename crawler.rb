@@ -34,7 +34,7 @@ lectures.each do |l|
   lecture_model = LectureModel.first(:serial => serial)
   next if lecture_model && (lecture_model.finished || !lecture_model.selection)
 
-  @agent.get_lecture_detail_page(l)
+  @agent.get_lecture_detail(l)
 
   page_encoding = @agent.page.body.encoding
   encoded_page = @agent.page.body.force_encoding(@agent.page.encoding).encode(Encoding::UTF_8,:undef=>:replace,:invalid=>:replace)
@@ -44,7 +44,7 @@ lectures.each do |l|
   no_selection = encoded_page.match(/「履修者選抜なし」となりました/)
   finished = !selection || list_link || no_selection
 
-  puts "#{serial} : #{l.title} (Selection:#{selection ? 'Yes' : 'No'} / Finished:#{finished ? 'Yes' : 'No'})"
+  puts "#{serial} : #{l.title} (Selection:#{selection ? 'Yes' : 'No'} / Finished:#{finished ? 'Yes' : 'No'}) applicants #{l.applicants} limit #{l.limit}"
 
   permissions = []
   tweet = nil
@@ -68,17 +68,26 @@ lectures.each do |l|
     if no_selection
       tweet = "#{l.title} (#{l.instructor}君) は「履修選抜なし」になった模様です"
     end
-    lecture_model.update( :finished  => (finished ? true: false))
+    lecture_model.update( :finished   => (finished ? true: false),
+                          :applicants => l.applicants,
+                          :limit      => l.limit,
+                          :odds       => l.limit ? l.applicants.to_f / l.limit.to_f : 0,
+    )
   else
     LectureModel.create(:serial => serial,
-                    :title  => l.title,
-                    :selection => (selection ? true : false),
-                    :finished  => (finished ? true: false),
+                        :title  => l.title,
+                        :selection => (selection ? true : false),
+                        :finished  => (finished ? true: false),
+                        :applicants => l.applicants,
+                        :limit      => l.limit,
+                        :odds       => l.limit ? l.applicants.to_f / l.limit.to_f : 0,
     )
   end
   if tweet
     tweet += " #SFC履修選抜 http://xn--8uqs71aoyeyq7c.xn--s9j219o.jp/"
     puts tweet
-    client.update tweet
+    begin
+      client.update tweet
+    end
   end
 end
