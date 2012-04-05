@@ -1,7 +1,6 @@
 #coding:UTF-8
 require './model.rb'
 require 'pit'
-require 'kconv'
 require 'twitter'
 require './lib/sfcsfs/lib/sfcsfs'
 
@@ -89,6 +88,9 @@ lectures.each do |l|
     puts tweet
     begin
       client.update tweet
+    rescue=>e
+      p e
+      warn e
     end
   end
 end
