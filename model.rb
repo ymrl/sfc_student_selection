@@ -12,6 +12,7 @@ class LectureModel < Sequel::Model
     integer :applicants
     integer :limit
     float :odds
+    string :instructor
   end
 end
 class PermissionModel < Sequel::Model

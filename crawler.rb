@@ -43,7 +43,7 @@ lectures.each do |l|
   no_selection = encoded_page.match(/「履修者選抜なし」となりました/)
   finished = !selection || list_link || no_selection
 
-  puts "#{serial} : #{l.title} (Selection:#{selection ? 'Yes' : 'No'} / Finished:#{finished ? 'Yes' : 'No'}) applicants #{l.applicants} limit #{l.limit}"
+  puts "#{serial} : #{l.title} (#{l.instructor} / Selection:#{selection ? 'Yes' : 'No'} / Finished:#{finished ? 'Yes' : 'No'} / Applicants:#{l.applicants}  / Limit:#{l.limit})"
 
   permissions = []
   tweet = nil
@@ -71,6 +71,7 @@ lectures.each do |l|
                           :applicants => l.applicants,
                           :limit      => l.limit,
                           :odds       => l.limit ? l.applicants.to_f / l.limit.to_f : 0,
+                          :instructor => l.instructor,
     )
   else
     LectureModel.create(:serial => serial,
@@ -80,6 +81,7 @@ lectures.each do |l|
                         :applicants => l.applicants,
                         :limit      => l.limit,
                         :odds       => l.limit ? l.applicants.to_f / l.limit.to_f : 0,
+                        :instructor => l.instructor,
     )
   end
   if tweet
