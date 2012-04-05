@@ -1,9 +1,9 @@
 #coding:UTF-8
+require './model.rb'
 require 'pit'
 require 'kconv'
 require 'twitter'
 require './lib/sfcsfs/lib/sfcsfs'
-require './model.rb'
 
 config = Pit.get("sfcsfs", :require => {
     :account  => "your CNS account",
@@ -25,7 +25,6 @@ client = Twitter::Client.new
 
 @agent = SFCSFS.login(config[:account],config[:password])
 lectures = @agent.my_schedule
-
 
 lectures.each do |l|
   serial = l.query['yc']
