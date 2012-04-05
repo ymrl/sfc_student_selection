@@ -30,7 +30,7 @@ lectures.each do |l|
   serial = l.query['yc']
   next if !serial
 
-  lecture_model = LectureModel.first(:serial => serial)
+  lecture_model = LectureModel.find(:serial => serial)
   next if lecture_model && (lecture_model.finished || !lecture_model.selection)
 
   @agent.get_lecture_detail(l)
