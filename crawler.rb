@@ -50,6 +50,14 @@ lectures.each do |l|
   if list_link
     list_link.click
     list = @agent.page.search('tr[bgcolor="#efefef"] td').map{|e| e.text}
+    if list.length == 0
+      m = @agent.page.uri.to_s.match(/vu(\d)/)
+      if m
+        n = (m=='9' ? 8 : 9)
+        @agent.get @agent.page.uri.to_s.gsub(/vu\d/,"vu#{n}")
+        list = @agent.page.search('tr[bgcolor="#efefef"] td').map{|e| e.text}
+      end
+    end
     list.each do |n|
       next if n !~ /^\d{8}/
       permissions.push(PermissionModel.create(
@@ -58,7 +66,11 @@ lectures.each do |l|
           :lecture_title => title
         ))
     end
-    tweet = "#{l.title} (#{l.instructor}君) の履修選抜結果が出ました。#{permissions.length}人に履修許可が出ています"
+    if permissions.length > 0
+      tweet = "#{l.title} (#{l.instructor}君) の履修選抜結果が出ました。#{permissions.length}人に履修許可が出ています"
+    else
+      finished = false
+    end
   end
 
 
