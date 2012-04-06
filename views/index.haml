@@ -1,10 +1,7 @@
+.page-header
+  %h1 履修選抜.死ぬ.jp
 %p
   <span style="color:#f00">[NEW!!]</span>抽選倍率の高い授業をお知らせする<a href="/hot">「ホットな授業」ページ</a>を公開しました
-%form{:id=>:numForm}
-  %div
-    学籍番号:
-    %input{:type=>:text,:name=>:num,:id=>:num}
-    %input{:type=>:submit,:value=>'見る'}
 %p
   http://履修選抜.死ぬ.jp/自分の学籍番号 で履修選抜を通っている科目を見ることができます。情報はSFC-SFSを20分ごとにクロールして収集しています。選抜結果の公開情報などは <a href="http://twitter.com/sfc_selection">@sfc_selection</a>がTwitterに発言します。
 %p
@@ -13,7 +10,3 @@
 %script{:charset=>"utf-8",:src=>"http://widgets.twimg.com/j/2/widget.js"}
 %script
   new TWTR.Widget({ version: 2, type: 'search', search: '#SFC履修選抜', interval: 30000, title: '', subject: '#SFC履修選抜', width: 515, height: 300, theme: { shell: { background: '#8ec1da', color: '#ffffff' }, tweets: { background: '#ffffff', color: '#444444', links: '#1985b5' } }, features: { scrollbar: false, loop: true, live: true, behavior: 'default' } }).render().start(); </script>
-%p
-  このWebサイトのコード、ならびにSFC-SFSから情報を取得するスクリプトは <a href="https://github.com/ymrl/sfc_student_selection">https://github.com/ymrl/sfc_student_selection</a> にて公開してあります。
-%p 
-  ご意見、ご要望はTwitterから<a href="http://twitter.com/ymrl">@ymrl</a>またはメールで ymrl [at] ymrl.net までお送りください。

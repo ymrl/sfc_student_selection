@@ -4,8 +4,33 @@
     %meta{:charset => "UTF-8"}
     %title 履修選抜.死ぬ.jp
     %script{:src=>"/jquery.min.js",:type=>"text/javascript"}
+    %script{:src=>"/js/bootstrap.min.js",:type=>"text/javascript"}
     %script{:src=>"http://platform.twitter.com/anywhere.js?id=drT3DAFa5ZiYKMjxMXKcw&v=1",:type=>"text/javascript"}
     %script{:src=>"/js.js",:type=>"text/javascript"}
+    %link{:rel=>'stylesheet',:href=>'/css/bootstrap.min.css'}
+    %link{:rel=>'stylesheet',:href=>'/css/bootstrap-responsive.min.css'}
+    %link{:rel=>'stylesheet',:href=>'/css.css'}
   %body
-    %h1 履修選抜.死ぬ.jp
-    = yield
+    .navbar
+      .navbar-inner
+        .container
+          %h1
+            %a.brand{:href=>'http://xn--8uqs71aoyeyq7c.xn--s9j219o.jp/'}
+              履修選抜.死ぬ.jp
+          %ul.nav
+            %li
+              %form.navbar-search.pull-left.numForm
+                選抜結果閲覧
+                %input.num.search-query{:type=>:text,:name=>:num,:placeholder=>'学籍番号'}
+            %li
+              %a{:href=>'/hot'}
+                ホットな授業
+    .container-fluid
+      = yield
+      %footer.footer
+        %p
+          このサイトに掲載されている情報は非公式のものです。必ず公式の情報もあわせてご参照ください。
+        %p
+          このWebサイトのコード、ならびにSFC-SFSから情報を取得するスクリプトは <a href="https://github.com/ymrl/sfc_student_selection">https://github.com/ymrl/sfc_student_selection</a> にて公開してあります。
+        %p 
+          ご意見、ご要望はTwitterから<a href="http://twitter.com/ymrl">@ymrl</a>またはメールで ymrl [at] ymrl.net までお送りください。

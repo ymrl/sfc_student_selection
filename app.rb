@@ -11,7 +11,7 @@ configure do
 end
 helpers do
   def h(s)
-    CGI.escapeHTML s
+    CGI.escapeHTML s.to_s
   end
 end
 
