@@ -2,6 +2,14 @@
   %h1 履修選抜.死ぬ.jp
 %p
   <span style="color:#f00">[NEW!!]</span>抽選倍率の高い授業をお知らせする<a href="/hot">「ホットな授業」ページ</a>を公開しました
+%form.numForm.form-horizontal
+  %legend 履修選抜結果を見る
+  .control-group
+    %label.control-label{:for=>:num}
+      学籍番号
+    .controls
+      %input.num.search-query{:type=>:text,:name=>:num,:placeholder=>'学籍番号'}
+      %input.btn.btn-primary{:type=>:submit,:value=>'見る'}
 %p
   http://履修選抜.死ぬ.jp/自分の学籍番号 で履修選抜を通っている科目を見ることができます。情報はSFC-SFSを20分ごとにクロールして収集しています。選抜結果の公開情報などは <a href="http://twitter.com/sfc_selection">@sfc_selection</a>がTwitterに発言します。
 %p
