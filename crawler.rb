@@ -38,7 +38,7 @@ lectures.each do |l|
   encoded_page = @agent.page.body.force_encoding(@agent.page.encoding).encode(Encoding::UTF_8,:undef=>:replace,:invalid=>:replace)
 
   selection = !encoded_page.match(/《履修人数を制限しない》/)
-  list_link = @agent.page.link_with(:text=>/履修許可者確認/)
+  list_link = encoded_page.match(/履修許可者確認/)
   no_selection = encoded_page.match(/「履修者選抜なし」となりました/)
   finished = !selection || list_link || no_selection
 
@@ -48,7 +48,8 @@ lectures.each do |l|
   tweet = nil
 
   if list_link
-    list_link.click
+    uri = @agent.page.uri+"view_student_select.cgi?enc_id=#{agent.query_values['id']}&yc=#{serial}&lang=ja"
+    @agent.get(uri)
     list = @agent.page.search('tr[bgcolor="#efefef"] td').map{|e| e.text}
     if list.length == 0
       m = @agent.page.uri.to_s.match(/vu(\d)/)
