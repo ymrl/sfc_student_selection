@@ -20,13 +20,18 @@
           %ul.nav
             %li
               %form.navbar-search.pull-left.numForm
-                選抜結果閲覧
                 %input.num.search-query{:type=>:text,:name=>:num,:placeholder=>'学籍番号'}
+                %input.search-query{:type=>:submit,:value=>'選抜結果を見る'}
             %li
               %a{:href=>'/hot'}
                 ホットな授業
     .container-fluid
-      = yield
+      .row-fluid
+        .span8
+          = yield
+        .span4
+          <script charset="utf-8" src="http://widgets.twimg.com/j/2/widget.js"></script>
+          <script> new TWTR.Widget({ version: 2, type: 'search', search: '#SFC履修選抜', interval: 30000, title: '選抜を通ったらツイートしよう！', subject: '#SFC履修選抜', width: 'auto', height: 300, theme: { shell: { background: '#8ec1da', color: '#ffffff' }, tweets: { background: '#ffffff', color: '#444444', links: '#1985b5' } }, features: { scrollbar: false, loop: true, live: true, behavior: 'default' } }).render().start(); </script>
       %footer.footer
         %p
           このサイトに掲載されている情報は非公式のものです。必ず公式の情報もあわせてご参照ください。

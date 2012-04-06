@@ -63,7 +63,7 @@ lectures.each do |l|
       permissions.push(PermissionModel.create(
           :number => n,
           :lecture_serial => serial,
-          :lecture_title => title
+          :lecture_title => l.title
         ))
     end
     if permissions.length > 0
@@ -96,7 +96,7 @@ lectures.each do |l|
     )
   end
   if tweet
-    tweet += " #SFC履修選抜 http://xn--8uqs71aoyeyq7c.xn--s9j219o.jp/"
+    tweet += " #SFC履修選抜 http://履修選抜.死ぬ.jp/"
     puts tweet
     begin
       client.update tweet
