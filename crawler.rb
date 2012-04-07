@@ -48,7 +48,7 @@ lectures.each do |l|
   tweet = nil
 
   if list_link
-    uri = @agent.page.uri+"view_student_select.cgi?enc_id=#{agent.query_values['id']}&yc=#{serial}&lang=ja"
+    uri = @agent.page.uri+"view_student_select.cgi?enc_id=#{@agent.query_values['id']}&yc=#{serial}&lang=ja"
     @agent.get(uri)
     list = @agent.page.search('tr[bgcolor="#efefef"] td').map{|e| e.text}
     if list.length == 0
