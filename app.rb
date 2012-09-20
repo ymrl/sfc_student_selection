@@ -22,7 +22,7 @@ get '/js.js' do
   coffee :js
 end
 get '/hot' do
-  @hots = LectureModel.limit(40).filter(:selection=>true,:finished=>false).filter('odds > 1.0').order(:odds).reverse.all
+  @hots = Lecture.limit(40).filter(:selection=>true,:finished=>false).filter('odds > 1.0').order(:odds).reverse.all
   haml :hot
 end
 
@@ -32,7 +32,7 @@ get '/:num' do
   if num !~ /^\d{8}$/
     @pms = []
   else
-    @pms = PermissionModel.filter(:number=>num).all
+    @pms = Permission.filter(:number=>num).all
   end
   @intern = request.ip.match(/^133\.27\./)
   haml :list
