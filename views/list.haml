@@ -5,7 +5,7 @@
 %ul#list{:class=>@intern ? 'intern' : 'outside'}
   - @pms.each do |e|
     %li
-      = h (@intern? e.lecture_title : "****")
+      = h (@intern? e.lecture.title : "****")
   - if @pms.length == 0
     %li.nocount （情報なし）
 -if !@intern

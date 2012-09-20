@@ -1,22 +1,61 @@
-.page-header
-  %h1 履修選抜.死ぬ.jp
-%p
-  <span class="label label-info">New</span> <a href="http://sfcclip.net/news2012040603">SFC CLIPに紹介されました</a>
-%p
-  <span class="label label-info">New</span> 抽選倍率の高い授業をお知らせする<a href="/hot">「ホットな授業」ページ</a>を公開しました
-%form.numForm.form-horizontal
-  %legend 履修選抜結果を見る
-  .control-group
-    %label.control-label{:for=>:num}
-      学籍番号
-    .controls
-      %input.num.search-query{:type=>:text,:name=>:num,:placeholder=>'学籍番号'}
-      %input.btn.btn-primary{:type=>:submit,:value=>'見る'}
-%p
-  http://履修選抜.死ぬ.jp/自分の学籍番号 で履修選抜を通っている科目を見ることができます。情報はSFC-SFSを20分ごとにクロールして収集しています。選抜結果の公開情報などは <a href="http://twitter.com/sfc_selection">@sfc_selection</a>がTwitterに発言します。
-%p
-  <a href="https://twitter.com/SFC_selection" class="twitter-follow-button" data-show-count="false" data-lang="ja" data-size="large">@SFC_selectionをフォロー</a>
-  <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
-%p
-  SFC外からのアクセスの場合は、科目名が伏字で表示されます。すべてを表示するためには<a href="http://www.sfc.itc.keio.ac.jp/ja/network_cns_vpn.html">VPNサービス</a>をご利用ください。
-#tbox
+!!!
+%html
+  %head
+    %meta{:charset => "UTF-8"}
+    %title 履修選抜.死ぬ.jp
+    %script{:src=>"/jquery.min.js",:type=>"text/javascript"}
+    %script{:src=>"/bootstrap/js/bootstrap.min.js",:type=>"text/javascript"}
+    %script{:src=>"http://platform.twitter.com/anywhere.js?id=drT3DAFa5ZiYKMjxMXKcw&v=1",:type=>"text/javascript"}
+    %script{:src=>"/senbatsu.js",:type=>"text/javascript"}
+    %link{:rel=>'stylesheet',:href=>'/bootstrap/css/bootstrap.min.css'}
+    %link{:rel=>'stylesheet',:href=>'/bootstrap/css/bootstrap-responsive.min.css'}
+    %link{:rel=>'stylesheet',:href=>"/styles.css"}
+  %body
+    .navbar.navbar-inverse
+      .navbar-inner
+        %a.brand{:href=>'http://xn--8uqs71aoyeyq7c.xn--s9j219o.jp/'}
+          履修選抜.死ぬ.jp
+
+        %ul.nav
+          %li
+            %a{:href=>'/about'}
+              このサイトについて
+          %li
+            %a{:href=>'/hot'}
+              ホットな授業
+        %ul.nav.pull-right
+          %li
+            %form.navbar-search.numForm
+              %input.num.search-query{:type=>:text,:name=>:num,:placeholder=>'学籍番号'}
+              %input.search-query{:type=>:submit,:value=>'選抜結果を見る'}
+    .container
+      .row
+        .span12
+          .hero-unit
+            %h1 履修選抜.死ぬ.jp
+            %p 学籍番号を入れるだけで、履修選抜の状況がわかります。
+            %form.numForm.form-search
+              %input.num.search-query{:type=>:text,:name=>:num,:placeholder=>'学籍番号'}
+              %input.btn.btn-primary{:type=>:submit,:value=>'見る'}
+          %p
+            SFC外からのアクセスの場合は、科目名が伏字で表示されます。すべてを表示するためには<a href="http://www.sfc.itc.keio.ac.jp/ja/network_cns_vpn.html">VPNサービス</a>をご利用ください。
+          %p
+            Twitterで履修選抜最新情報を発信中です。 <a href="https://twitter.com/SFC_selection" class="twitter-follow-button" data-show-count="false" data-lang="ja" data-size="large">@SFC_selectionをフォロー</a>
+          <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+          %h2
+            おしらせ
+          %ul.news
+            %li
+              <span class="label label-info">New</span> 2012年度秋学期のデータに更新しました
+            %li
+              <a href="http://sfcclip.net/news2012040603">SFC CLIPに紹介されました</a>
+            %li
+              抽選倍率の高い授業をお知らせする<a href="/hot">「ホットな授業」ページ</a>を公開しました
+          #tbox
+    %footer.footer
+      %p
+        このサイトに掲載されている情報は非公式のものです。必ず公式の情報もあわせてご参照ください。
+      %p
+        このWebサイトのコードは <a href="https://github.com/ymrl/sfc_student_selection">https://github.com/ymrl/sfc_student_selection</a> にて公開してあります。
+      %p 
+        ご意見、ご要望はTwitterから<a href="http://twitter.com/ymrl">@ymrl</a>またはメールで ymrl [at] ymrl.net までお送りください。

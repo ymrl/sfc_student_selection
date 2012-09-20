@@ -16,10 +16,16 @@ helpers do
 end
 
 get '/' do
-  haml :index
+  haml :index,:layout=>false
 end
-get '/js.js' do
-  coffee :js
+get '/about' do
+  haml :about
+end
+get '/senbatsu.js' do
+  coffee :senbatsu
+end
+get '/styles.css' do
+  less :styles
 end
 get '/hot' do
   @hots = Lecture.limit(40).filter(:selection=>true,:finished=>false).filter('odds > 1.0').order(:odds).reverse.all
@@ -32,7 +38,7 @@ get '/:num' do
   if num !~ /^\d{8}$/
     @pms = []
   else
-    @pms = Permission.filter(:number=>num).all
+    @pms = Permission.join(:lectures).filter(:number=>num).all
   end
   @intern = request.ip.match(/^133\.27\./)
   haml :list
