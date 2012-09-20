@@ -9,9 +9,8 @@
     git clone git@github.com:ymrl/sfc_student_selection.git
 		cd sfc_student_selection
 
-		# SFCSFSライブラリの取得
-		git submodule init
-		git submodule update
+		# gemの取得
+		bundle install
 
 		# SFSをクロール（初回はかなり時間がかかります）
 		ruby crawler.rb
