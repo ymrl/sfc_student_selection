@@ -1,28 +1,31 @@
 require 'sequel'
 Sequel::Model.plugin(:schema)
-Sequel.connect("sqlite://db/senbatsu.db")
+DB = Sequel.connect("sqlite://db/sfs.db")
 
-class LectureModel < Sequel::Model
+class Lecture < Sequel::Model
   set_schema do
     primary_key :id
-    string :serial
-    string :title
-    bool :selection
-    bool :finished
-    integer :applicants
-    integer :limit
-    float :odds
-    string :instructor
+    String :title        , :size=>255
+    String :instructor   , :size=>255    
+    String :yc           , :size=>255
+    String :ks           , :size=>255
+    String :place        , :size=>255
+    TrueClass :selection
+    TrueClass :finished
+    Integer :applicants
+    Integer :limit
+    Float :odds
   end
+  one_to_many :permissions
 end
-class PermissionModel < Sequel::Model
+class Permission < Sequel::Model
   set_schema do
     primary_key :id
-    string :number
-    string :lecture_serial
-    string :lecture_title
+    String :number,        :size=>255
+    Integer :lecture_id
   end
+  many_to_one :lecture
 end
 
-LectureModel.create_table if !LectureModel.table_exists?
-PermissionModel.create_table if !PermissionModel.table_exists?
+Lecture.create_table if !Lecture.table_exists?
+Permission.create_table if !Permission.table_exists?

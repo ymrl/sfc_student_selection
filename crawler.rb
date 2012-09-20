@@ -2,7 +2,7 @@
 require './model.rb'
 require 'pit'
 require 'twitter'
-require './lib/sfcsfs/lib/sfcsfs'
+require 'sfcsfs'
 
 config = Pit.get("sfcsfs", :require => {
     :account  => "your CNS account",
@@ -22,80 +22,79 @@ Twitter.configure do |config|
 end
 client = Twitter::Client.new
 
-@agent = SFCSFS.login(config[:account],config[:password])
-lectures = @agent.my_schedule
+agent = SFCSFS.login(config[:account],config[:password])
+lectures = agent.my_schedule
 
-lectures.each do |l|
-  serial = l.query['yc']
-  next if !serial
+lectures.each do |lecture|
+  serial = lecture.yc
+  next if !lecture.yc
 
-  lecture_model = LectureModel.find(:serial => serial)
+
+  lecture_model = Lecture.find(:yc => lecture.yc)
   next if lecture_model && (lecture_model.finished || !lecture_model.selection)
+   
 
-  @agent.get_lecture_detail(l)
+  lecture.get_detail
+  page = agent.doc.to_s
 
-  page_encoding = @agent.page.body.encoding
-  encoded_page = @agent.page.body.force_encoding(@agent.page.encoding).encode(Encoding::UTF_8,:undef=>:replace,:invalid=>:replace)
-
-  selection = !encoded_page.match(/《履修人数を制限しない》/)
-  list_link = encoded_page.match(/履修許可者確認/)
-  no_selection = encoded_page.match(/「履修者選抜なし」となりました/)
+  #selection = !page.match(/《履修人数を制限しない》/)
+  selection = lecture.limit
+  list_link = page.match(/履修許可者確認/)
+  no_selection = page.match(/「履修者選抜なし」となりました/)
   finished = !selection || list_link || no_selection
 
-  puts "#{serial} : #{l.title} (#{l.instructor} / Selection:#{selection ? 'Yes' : 'No'} / Finished:#{finished ? 'Yes' : 'No'} / Applicants:#{l.applicants}  / Limit:#{l.limit})"
+  puts "#{lecture.title} : #{lecture.title} (#{lecture.instructor} / Selection:#{selection ? 'Yes' : 'No'} / Finished:#{finished ? 'Yes' : 'No'} / Applicants:#{lecture.applicants}  / Limit:#{lecture.limit})"
+
+  if !lecture_model
+    lecture_model = Lecture.create(:yc => lecture.yc,
+                   :ks => lecture.ks,
+                   :title  => lecture.title,
+                   :selection => (selection ? true : false),
+                   :finished  => (finished ? true: false),
+                   :applicants => lecture.applicants,
+                   :limit      => lecture.limit,
+                   :odds       => lecture.limit && lecture.limit != 0 ? lecture.applicants.to_f / lecture.limit.to_f : 0,
+                   :instructor => lecture.instructor,
+                   :place => lecture.place,
+    )
+  else
+    lecture_model.update( :finished   => (finished ? true: false),
+                          :applicants => lecture.applicants,
+                          :limit      => lecture.limit,
+                          :odds       => lecture.limit && lecture.limit != 0 ? lecture.applicants.to_f / lecture.limit.to_f : 0,
+                          :instructor => lecture.instructor,
+                          :place      => lecture.place )
+  end
 
   permissions = []
   tweet = nil
 
   if list_link
-    uri = @agent.page.uri+"view_student_select.cgi?enc_id=#{@agent.query_values['id']}&yc=#{serial}&lang=ja"
-    @agent.get(uri)
-    list = @agent.page.search('tr[bgcolor="#efefef"] td').map{|e| e.text}
-    if list.length == 0
-      m = @agent.page.uri.to_s.match(/vu(\d)/)
-      if m
-        n = (m=='9' ? 8 : 9)
-        @agent.get @agent.page.uri.to_s.gsub(/vu\d/,"vu#{n}")
-        list = @agent.page.search('tr[bgcolor="#efefef"] td').map{|e| e.text}
-      end
-    end
+    # 履修選抜リストがvu8だと真っ白になる問題への対応
+    # TODO: もうちょっとスマートにしたい
+    default_uri = agent.base_uri
+    agent.base_uri = URI.parse('https://vu9.sfc.keio.ac.jp/')
+
+    list = lecture.student_selection_list
+
+    agent.base_uri = default_uri
+
     list.each do |n|
       next if n !~ /^\d{8}/
-      permissions.push(PermissionModel.create(
+      permissions.push(Permission.create(
           :number => n,
-          :lecture_serial => serial,
-          :lecture_title => l.title
-        ))
+          :lecture_id => lecture_model.id
+      ))
     end
     if permissions.length > 0
-      tweet = "#{l.title} (#{l.instructor}君) の履修選抜結果が出ました。#{permissions.length}人に履修許可が出ています"
+      tweet = "#{lecture.title} (#{lecture.instructor}君) の履修選抜結果が出ました。#{permissions.length}人に履修許可が出ています"
     else
       finished = false
     end
+  elsif no_selection
+    tweet = "#{lecture.title} (#{lecture.instructor}君) は「履修選抜なし」になった模様です"
   end
 
-
-  if lecture_model
-    if no_selection
-      tweet = "#{l.title} (#{l.instructor}君) は「履修選抜なし」になった模様です"
-    end
-    lecture_model.update( :finished   => (finished ? true: false),
-                          :applicants => l.applicants,
-                          :limit      => l.limit,
-                          :odds       => l.limit ? l.applicants.to_f / l.limit.to_f : 0,
-                          :instructor => l.instructor,
-    )
-  else
-    LectureModel.create(:serial => serial,
-                        :title  => l.title,
-                        :selection => (selection ? true : false),
-                        :finished  => (finished ? true: false),
-                        :applicants => l.applicants,
-                        :limit      => l.limit,
-                        :odds       => l.limit ? l.applicants.to_f / l.limit.to_f : 0,
-                        :instructor => l.instructor,
-    )
-  end
   if tweet
     tweet += " #SFC履修選抜 http://履修選抜.死ぬ.jp/"
     puts tweet

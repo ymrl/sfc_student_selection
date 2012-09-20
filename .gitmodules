@@ -1,3 +1,0 @@
-[submodule "lib/sfcsfs"]
-	path = lib/sfcsfs
-	url = git@github.com:ymrl/sfcsfs.git
