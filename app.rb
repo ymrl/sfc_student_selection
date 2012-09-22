@@ -38,7 +38,7 @@ get '/:num' do
   if num !~ /^\d{8}$/
     @pms = []
   else
-    @pms = Permission.join(:lectures).filter(:number=>num).all
+    @pms = Permission.filter(:number=>num).all
   end
   @intern = request.ip.match(/^133\.27\./)
   haml :list
