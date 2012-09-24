@@ -23,7 +23,13 @@ end
 client = Twitter::Client.new
 
 agent = SFCSFS.login(config[:account],config[:password])
-lectures = agent.my_schedule
+lecture_models = Lecture.filter(:finished=>false).find
+lectures = nil
+if lecture_models.to_a.length > 0
+  lectures = lecture_models.map{|e| SFCSFS::Lecture.new(agent,e.title,e.instructor,:yc=>e.yc,:ks=>e.ks,:place=>e.place)}
+else
+  lectures = agent.my_schedule
+end
 
 lectures.each do |lecture|
   serial = lecture.yc
@@ -33,8 +39,16 @@ lectures.each do |lecture|
   lecture_model = Lecture.find(:yc => lecture.yc)
   next if lecture_model && (lecture_model.finished || !lecture_model.selection)
    
+  # 履修選抜リストがvu8だと真っ白になる問題への対応
+  # TODO: もうちょっとスマートにしたい
+  default_uri = agent.base_uri
+  agent.base_uri = URI.parse('https://vu9.sfc.keio.ac.jp/')
+
 
   lecture.get_detail
+
+  agent.base_uri = default_uri
+
   page = agent.doc.to_s
 
   #selection = !page.match(/《履修人数を制限しない》/)
@@ -70,6 +84,7 @@ lectures.each do |lecture|
   tweet = nil
 
   if list_link
+
     # 履修選抜リストがvu8だと真っ白になる問題への対応
     # TODO: もうちょっとスマートにしたい
     default_uri = agent.base_uri
@@ -90,6 +105,7 @@ lectures.each do |lecture|
       tweet = "#{lecture.title} (#{lecture.instructor}君) の履修選抜結果が出ました。#{permissions.length}人に履修許可が出ています"
     else
       finished = false
+      lecture_model.update( :finished   => false)
     end
   elsif no_selection
     tweet = "#{lecture.title} (#{lecture.instructor}君) は「履修選抜なし」になった模様です"
