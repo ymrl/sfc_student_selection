@@ -21,8 +21,21 @@ Twitter.configure do |config|
   config.oauth_token_secret = c[:access_token_secret]
 end
 client = Twitter::Client.new
+agent = nil
+tried = false
+begin
+  agent = SFCSFS.login(config[:account],config[:password])
+rescue
+  if !tried
+    puts "retry..."
+    sleep 10
+    tried = true
+    retry
+  else
+    exit 1
+  end
+end
 
-agent = SFCSFS.login(config[:account],config[:password])
 lecture_models = Lecture.filter(:finished=>false).find
 lectures = nil
 if lecture_models.to_a.length > 0
@@ -44,10 +57,23 @@ lectures.each do |lecture|
   default_uri = agent.base_uri
   agent.base_uri = URI.parse('https://vu9.sfc.keio.ac.jp/')
 
+  tried = false
+  begin
+    lecture.get_detail
+  rescue
+    if !tried
+      puts "retry..."
+      sleep 10
+      tried = true
+      retry
+    else
+      agent.base_uri = default_uri
+      next
+    end
+  ensure
+    agent.base_uri = default_uri
+  end
 
-  lecture.get_detail
-
-  agent.base_uri = default_uri
 
   page = agent.doc.to_s
 
@@ -85,14 +111,28 @@ lectures.each do |lecture|
 
   if list_link
 
-    # 履修選抜リストがvu8だと真っ白になる問題への対応
-    # TODO: もうちょっとスマートにしたい
+      # 履修選抜リストがvu8だと真っ白になる問題への対応
+      # TODO: もうちょっとスマートにしたい
     default_uri = agent.base_uri
     agent.base_uri = URI.parse('https://vu9.sfc.keio.ac.jp/')
 
-    list = lecture.student_selection_list
-
-    agent.base_uri = default_uri
+    list = nil
+    tried = false
+    begin
+      list = lecture.student_selection_list
+    rescue
+      if !tried
+        puts "retry..."
+        sleep 10
+        tried = true
+        retry
+      else
+        agent.base_uri = default_uri
+        next
+      end
+    ensure
+      agent.base_uri = default_uri
+    end
 
     list.each do |n|
       next if n !~ /^\d{8}/
