@@ -7,16 +7,20 @@
 --------
 
     git clone git@github.com:ymrl/sfc_student_selection.git
-		cd sfc_student_selection
+    cd sfc_student_selection
 
-		# gemの取得
-		bundle install
+    # gemの取得
+    bundle install
 
-		# SFSをクロール（初回はかなり時間がかかります）
-		ruby crawler.rb
+    # 全授業を履修希望登録
+    ruby addall.rb
 
-		# Webサーバー起動
-		ruby app.rb
+    # SFSをクロール（初回はかなり時間がかかります）
+    ruby crawler.rb
+    
+    # Webサーバー起動
+    ruby app.rb
+
 
 ライセンス
 --------
